@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe</title>
+  <style>
+    body{
+      font-family: Poppins, sans-serif;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      margin:0;
+      background:linear-gradient(135deg,#7cce73,#132d01);
+    }
+    .container{
+      text-align:center;
+      padding:20px;
+      background:#bef699aa;
+      border-radius:15px;
+      box-shadow:0 8px 25px #0003;
+    }
+    h2{margin-bottom:20px;
+    font-size:24px;}
+    
+    #game{
+      display:grid;
+      grid-template-columns:repeat(3,110px);
+      gap:10px;
+    }
+    .cell{
+      width:110px;height:110px;
+      background:#fff;
+      border-radius:12px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:48px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.25s;
+      box-shadow:0 0 12px #0002;
+    }
+    .cell:hover{
+      background:#ffe6ec;
+      transform:scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 id="status">Player X Turn</h2>
+  <div id="game"></div>
+</div>
+
+<script>
+let board=["","","","","","","","",""],player="X";
+const game=document.getElementById("game"),status=document.getElementById("status");
+
+function draw(){
+  game.innerHTML="";
+  board.forEach((v,i)=>{
+    let c=document.createElement("div");
+    c.className="cell";c.innerHTML=v;
+    c.onclick=()=>move(i);
+    game.appendChild(c);
+  });
+}
+
+function move(i){
+  if(board[i]!="") return;
+  board[i]=player;
+
+  if(win()){ status.innerHTML=player+" Wins 🎉"; return restart(); }
+  if(board.every(v=>v!="")){ status.innerHTML="Draw 🤝"; return restart(); }
+
+  player = (player=="X")?"O":"X";
+  status.innerHTML="Player "+player+" Turn";
+  draw();
+}
+
+function win(){
+  return [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],
+          [2,5,8],[0,4,8],[2,4,6]]
+  .some(l=>board[l[0]] && board[l[0]]==board[l[1]] && board[l[1]]==board[l[2]]);
+}
+
+function restart(){
+  setTimeout(()=>{
+    board=["","","","","","","","",""];
+    player="X"; status.innerHTML="Player X Turn"; draw();
+  },1200);
+}
+
+draw();
+</script>
+</body>
+</html>
